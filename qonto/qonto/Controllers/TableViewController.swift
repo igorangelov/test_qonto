@@ -8,13 +8,23 @@
 
 import UIKit
 
+
+enum DisplayType {
+    case User
+    case Album
+}
+
 class TableViewController: UITableViewController {
 
-    var userSelected : int?{
+    var userSelected : Int?{
         didSet {
-            self.configureTableViewForSelectedUser()
+            self.displayType = .Album
+            self.configureTableView()
         }
     }
+    
+    var displayType : DisplayType = .User
+    
     var items = [Any]()
     
     override func viewDidLoad() {
@@ -27,11 +37,7 @@ class TableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         //get list of user
-        ServicesManager.getUsers { (error, jsonResponse) in
-            guard let array  = jsonResponse as? [Any] else { return }
-            self.items = array
-            self.tableView.reloadData()
-        }
+        self.configureTableView()
     }
 
 
@@ -57,19 +63,31 @@ class TableViewController: UITableViewController {
 
         let item  = items[indexPath.row] as! [String:Any]
 
+
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath) as? UserTableViewCell else {
             return UITableViewCell()
         }
         
-        cell.userNameLabel.text = item["username"] as? String
+        var object = item["username"] as? String
+        if(displayType == .Album)
+        {
+            object = item["title"] as? String
+        }
+        
+        cell.userNameLabel.text = object
+
 
         return cell
     }
     
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let object = item[indexPath.row]
+        let item = items[indexPath.row] as! [String:Any]
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+       
+        let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "TableViewController") as! TableViewController
+        detailVC.userSelected = item["id"] as? Int
+        self.navigationController?.pushViewController(detailVC, animated: true)
     }
     
     /*
@@ -116,5 +134,27 @@ class TableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func configureTableView(){
+        
+        //get list of album for user id
+        if(displayType == .Album)
+        {
+            ServicesManager.getUserAlbums(userId: userSelected!){ (error, jsonResponse) in
+                guard let array  = jsonResponse as? [Any] else { return }
+                self.items = array
+                self.tableView.reloadData()
+            }
+        }else{
+            
+            ServicesManager.getUsers { (error, jsonResponse) in
+                guard let array  = jsonResponse as? [Any] else { return }
+                self.items = array
+                self.tableView.reloadData()
+            }
+        }
+        
+
+    }
 
 }

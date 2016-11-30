@@ -68,6 +68,44 @@ class ServicesManager {
     
     
     //***************************
+    //get User list for API
+    //***************************
+    class func getUserAlbums(userId: Int, callback: @escaping ResultResponseManager) {
+        
+        
+        Alamofire.request(UrlHelper.urlGetUserAlbums(id: userId),
+                          method: .get,
+                          parameters: nil,
+                          encoding: JSONEncoding.default,
+                          headers: ServicesManager.requestHeader(type:.Basic )
+            ).response { (response) in
+                
+                
+                guard let code = response.response?.statusCode else
+                {
+                    callback(.Error, nil )
+                    return
+                }
+                
+                
+                ///* Request fine */
+                if(ServicesManager.canSendResponse(code: code))
+                {
+                    //Verifiy Data
+                    if let data = response.data{
+                        let swiftyJsonVar : [Any] = JSON(data: data).arrayObject!
+                        callback(.None, swiftyJsonVar )
+                    }
+                }else{ ///* Request not fine */
+                    callback(.Error, nil )
+                }
+                
+        }
+        
+        
+    }
+    
+    //***************************
     //retour bool depend of http code
     //***************************
     class func canSendResponse(code : Int) -> Bool {

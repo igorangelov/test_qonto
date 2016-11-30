@@ -26,6 +26,10 @@ class UrlHelper {
         return "\(UrlHelper.getBaseURL())/users"
     }
 
+    class func urlGetUserAlbums(id:Int)->String
+    {
+        return "\(UrlHelper.getBaseURL())/users/\(id)/albums"
+    }
     
 
     
