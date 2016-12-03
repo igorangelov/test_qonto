@@ -19,7 +19,6 @@ class TableViewController: UITableViewController {
     var userSelected : Int?{
         didSet {
             self.displayType = .Album
-            self.configureTableView()
         }
     }
     
@@ -36,11 +35,23 @@ class TableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        //get list of user
-        self.configureTableView()
+    
+        
     }
 
-
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if(displayType == .User) {
+            //get list of users
+            self.configureTableViewWithUsers()
+        }else{
+            //get list of albums
+            self.configureTableViewWithAlbums()
+        }
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -63,31 +74,59 @@ class TableViewController: UITableViewController {
 
         let item  = items[indexPath.row] as! [String:Any]
 
-
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath) as? UserTableViewCell else {
-            return UITableViewCell()
-        }
-        
-        var object = item["username"] as? String
         if(displayType == .Album)
         {
-            object = item["title"] as? String
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "albumCell", for: indexPath) as? AlbumTableViewCell else {
+                return UITableViewCell()
+            }
+
+            let album = Album.init(dict: item)
+            let albumViewModel = AlbumViewModel.init(album: album)
+            cell.albumViewModel = albumViewModel
+            return cell
+        }
+        else{
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath) as? UserTableViewCell else {
+                return UITableViewCell()
+            }
+            
+            let user = User.init(dict: item)
+            let userViewModel = UserViewModel.init(user:user)
+            cell.userViewModel = userViewModel
+            
+            return cell
+
         }
         
-        cell.userNameLabel.text = object
-
-
-        return cell
     }
     
-
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
         let item = items[indexPath.row] as! [String:Any]
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-       
-        let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "TableViewController") as! TableViewController
-        detailVC.userSelected = item["id"] as? Int
-        self.navigationController?.pushViewController(detailVC, animated: true)
+        if(displayType == .Album)
+        {
+
+            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "galleryController") as! GalleryViewController
+            detailVC.idAlbumSelected = item["id"] as? Int
+            
+            self.navigationController?.pushViewController(detailVC, animated: true)
+
+            return
+        }else{
+
+            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            let detailVC = mainStoryboard.instantiateViewController(withIdentifier: "TableViewController") as! TableViewController
+            detailVC.userSelected = item["id"] as? Int
+            
+            self.navigationController?.pushViewController(detailVC, animated: true)
+
+        }
+        
+        
+        
     }
     
     /*
@@ -125,36 +164,31 @@ class TableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-    func configureTableView(){
+   
+    func configureTableViewWithAlbums(){
         
         //get list of album for user id
-        if(displayType == .Album)
-        {
-            ServicesManager.getUserAlbums(userId: userSelected!){ (error, jsonResponse) in
-                guard let array  = jsonResponse as? [Any] else { return }
-                self.items = array
-                self.tableView.reloadData()
-            }
-        }else{
-            
-            ServicesManager.getUsers { (error, jsonResponse) in
-                guard let array  = jsonResponse as? [Any] else { return }
-                self.items = array
-                self.tableView.reloadData()
-            }
+        ServicesManager.getUserAlbums(userId: userSelected!){ (error, jsonResponse) in
+            guard let array  = jsonResponse as? [Any] else { return }
+            self.items = array
+            self.tableView.reloadData()
         }
         
-
     }
 
+    func configureTableViewWithUsers(){
+        
+        //get list of users
+        ServicesManager.getUsers { (error, jsonResponse) in
+            guard let array  = jsonResponse as? [Any] else { return }
+            self.items = array
+            self.tableView.reloadData()
+        }
+        
+    }
+
+    
 }

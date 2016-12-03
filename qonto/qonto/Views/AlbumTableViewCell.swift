@@ -1,16 +1,16 @@
 //
-//  UserTableViewCell.swift
+//  AlbumTableViewCell.swift
 //  qonto
 //
-//  Created by Igor Angelov on 30/11/2016.
+//  Created by Igor Angelov on 02/12/2016.
 //  Copyright © 2016 Igor Angelov. All rights reserved.
 //
 
 import UIKit
 
-class UserTableViewCell: UITableViewCell {
+class AlbumTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var userNameLabel : UILabel!
+    @IBOutlet weak var albumTitleLabel : UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,11 +23,11 @@ class UserTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-    
-    var userViewModel : UserViewModel?{
+    var albumViewModel : AlbumViewModel?{
         didSet{
-            guard let userVM = userViewModel else { return }
-            self.userNameLabel.text = userVM.nameText
+            guard let albumVM = albumViewModel else { return }
+            self.albumTitleLabel.text = albumVM.titleText
         }
     }
+    
 }

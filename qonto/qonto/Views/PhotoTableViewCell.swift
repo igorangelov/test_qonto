@@ -1,17 +1,15 @@
 //
-//  UserTableViewCell.swift
+//  PhotoTableViewCell.swift
 //  qonto
 //
-//  Created by Igor Angelov on 30/11/2016.
+//  Created by Igor Angelov on 02/12/2016.
 //  Copyright © 2016 Igor Angelov. All rights reserved.
 //
 
 import UIKit
 
-class UserTableViewCell: UITableViewCell {
+class PhotoTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var userNameLabel : UILabel!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -23,11 +21,4 @@ class UserTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
-    
-    var userViewModel : UserViewModel?{
-        didSet{
-            guard let userVM = userViewModel else { return }
-            self.userNameLabel.text = userVM.nameText
-        }
-    }
 }

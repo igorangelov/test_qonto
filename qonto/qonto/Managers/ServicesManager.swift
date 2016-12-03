@@ -68,10 +68,11 @@ class ServicesManager {
     
     
     //***************************
-    //get User list for API
+    //get Album list for API
     //***************************
     class func getUserAlbums(userId: Int, callback: @escaping ResultResponseManager) {
         
+                debugPrint(UrlHelper.urlGetUserAlbums(id: userId))
         
         Alamofire.request(UrlHelper.urlGetUserAlbums(id: userId),
                           method: .get,
@@ -104,6 +105,45 @@ class ServicesManager {
         
         
     }
+    
+    //***************************
+    //get Photo list for API
+    //***************************
+    class func getAlbumPhotos(albumId: Int, callback: @escaping ResultResponseManager) {
+        
+                        debugPrint(UrlHelper.urlGetAlbumPhotos(id: albumId))
+        
+        Alamofire.request(UrlHelper.urlGetAlbumPhotos(id: albumId),
+                          method: .get,
+                          parameters: nil,
+                          encoding: JSONEncoding.default,
+                          headers: ServicesManager.requestHeader(type:.Basic )
+            ).response { (response) in
+                
+                
+                guard let code = response.response?.statusCode else
+                {
+                    callback(.Error, nil )
+                    return
+                }
+                
+                ///* Request fine */
+                if(ServicesManager.canSendResponse(code: code))
+                {
+                    //Verifiy Data
+                    if let data = response.data{
+                        let swiftyJsonVar : [Any] = JSON(data: data).arrayObject!
+                        callback(.None, swiftyJsonVar )
+                    }
+                }else{ ///* Request not fine */
+                    callback(.Error, nil )
+                }
+                
+        }
+        
+        
+    }
+    
     
     //***************************
     //retour bool depend of http code
