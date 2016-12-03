@@ -38,7 +38,7 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
 
     func configureCollectionView(){
         
-        //get list of album for user id
+        //get list of photo with album id
         ServicesManager.getAlbumPhotos(albumId: idAlbumSelected!){ (error, jsonResponse) in
             guard let array  = jsonResponse as? [Any] else { return }
             self.items = array
@@ -58,10 +58,7 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
     */
     
     // MARK: - CollectionView
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
-    }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count
     }
