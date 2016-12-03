@@ -8,17 +8,20 @@
 
 import UIKit
 
-class PhotoTableViewCell: UITableViewCell {
+class PhotoCollectionViewCell: UICollectionViewCell {
 
+    @IBOutlet weak var photoImageView : UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
+    var viewModel : PhotoViewModel?{
+        didSet{
+            guard let photoVM = viewModel else { return }
+            photoImageView.downloadedFrom(link: photoVM.urlPhoto)
+        }
     }
-
 }
