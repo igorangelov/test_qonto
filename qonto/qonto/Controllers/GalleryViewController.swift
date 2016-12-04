@@ -13,11 +13,7 @@ class GalleryViewController: UIViewController, UICollectionViewDelegate, UIColle
     @IBOutlet weak var collectionView : UICollectionView!
     
     var items = [Any]()
-    var idAlbumSelected : Int?{
-        didSet {
-            self.configureCollectionView()
-        }
-    }
+    var idAlbumSelected : Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()

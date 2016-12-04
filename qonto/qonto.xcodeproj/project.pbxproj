@@ -29,6 +29,8 @@
 		529E0A9F1DF210C60097A9BE /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529E0A9E1DF210C60097A9BE /* GalleryViewController.swift */; };
 		529E0AA21DF2F7A00097A9BE /* PhotoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529E0AA11DF2F7A00097A9BE /* PhotoViewModel.swift */; };
 		529E0AA61DF2FD4B0097A9BE /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529E0AA51DF2FD4B0097A9BE /* UIImageViewExtension.swift */; };
+		529E0AB41DF31E410097A9BE /* SupraCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529E0AB31DF31E410097A9BE /* SupraCacheManager.swift */; };
+		529E0ABE1DF494730097A9BE /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529E0ABD1DF494730097A9BE /* Reachability.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +70,8 @@
 		529E0A9E1DF210C60097A9BE /* GalleryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GalleryViewController.swift; path = Controllers/GalleryViewController.swift; sourceTree = "<group>"; };
 		529E0AA11DF2F7A00097A9BE /* PhotoViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhotoViewModel.swift; path = Models/PhotoViewModel.swift; sourceTree = "<group>"; };
 		529E0AA51DF2FD4B0097A9BE /* UIImageViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
+		529E0AB31DF31E410097A9BE /* SupraCacheManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupraCacheManager.swift; sourceTree = "<group>"; };
+		529E0ABD1DF494730097A9BE /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,8 +151,10 @@
 		528D33E41DEED1240079DB2C /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				529E0AB31DF31E410097A9BE /* SupraCacheManager.swift */,
 				529E0AA51DF2FD4B0097A9BE /* UIImageViewExtension.swift */,
 				528D33E51DEED1240079DB2C /* UrlHelper.swift */,
+				529E0ABD1DF494730097A9BE /* Reachability.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -324,12 +330,14 @@
 				528D33E81DEED1240079DB2C /* UrlHelper.swift in Sources */,
 				528D33FF1DF0D8C10079DB2C /* User.swift in Sources */,
 				529E0AA61DF2FD4B0097A9BE /* UIImageViewExtension.swift in Sources */,
+				529E0ABE1DF494730097A9BE /* Reachability.swift in Sources */,
 				529E0A9F1DF210C60097A9BE /* GalleryViewController.swift in Sources */,
 				528D33C21DEECEAA0079DB2C /* AppDelegate.swift in Sources */,
 				528D34071DF1081E0079DB2C /* AlbumTableViewCell.swift in Sources */,
 				528D33F31DEED70C0079DB2C /* TableViewController.swift in Sources */,
 				529E0AA21DF2F7A00097A9BE /* PhotoViewModel.swift in Sources */,
 				528D34011DF0DB4C0079DB2C /* UserViewModel.swift in Sources */,
+				529E0AB41DF31E410097A9BE /* SupraCacheManager.swift in Sources */,
 				528D33FC1DEEDE250079DB2C /* UserTableViewCell.swift in Sources */,
 				528D34031DF0DC4A0079DB2C /* Album.swift in Sources */,
 				529E0A9B1DF1A2790097A9BE /* PhotoTableViewCell.swift in Sources */,

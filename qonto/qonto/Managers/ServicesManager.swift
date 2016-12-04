@@ -27,43 +27,83 @@ enum HeaderContentType : String {
 
 class ServicesManager {
 
-    //***************************
-    //get User list for API
-    //***************************
-    class func getUsers(callback: @escaping ResultResponseManager) {
     
-        debugPrint(UrlHelper.urlGetUserList())
+    //*****************
+    // Basic get RESTAPI
+    //**************
+    
+    class func get(url : String, cached isCached : Bool = true, callback: @escaping ResultResponseManager)
+    {
+        //manager cached data func
+        func getCachedData()
+        {
+            
+            SupraCacheManager.getData(url: url, expiredAt: SupraCacheManager.makeExpiredDayWeek(weekLater: 1), completion: { (errors, data) -> Void in
+                
+                if errors == nil {
+                    
+                    // if can find cached
+                    if let swiftyJsonVar : [Any] = JSON(data: data as! Data).arrayObject {
+                        callback(.None, swiftyJsonVar )
+                        return
+                    }
+                    // if cannot find cached
+                    callback(.Error, nil )
+                    return
+                }
+                
+            }, callResource: nil)
+        }
         
-        Alamofire.request(UrlHelper.urlGetUserList(),
+        if(Reachability.isConnectedToNetwork() == false){
+            getCachedData()
+        }
+        
+        debugPrint(url)
+        Alamofire.request(url,
                           method: .get,
                           parameters: nil,
                           encoding: JSONEncoding.default,
                           headers: ServicesManager.requestHeader(type:.Basic )
             ).response { (response) in
-            
-
-            guard let code = response.response?.statusCode else
+                
+              
+                
+                guard let code = response.response?.statusCode else
                 {
+                    getCachedData()
                     callback(.Error, nil )
                     return
                 }
                 
+                
+                ///* Request fine */
+                if(ServicesManager.canSendResponse(code: code))
+                {
+                    //Verifiy Data
+                    if let data = response.data{
+                        let swiftyJsonVar : [Any] = JSON(data: data).arrayObject!
+                        callback(.None, swiftyJsonVar )
+                        //cache Data
+                        SupraCacheManager.pushDataToCache(url: url, expiredAt: SupraCacheManager.makeExpiredDayWeek(weekLater: 1), data: data as NSData)
+                    }
+                }else{ ///* Request not fine */
 
-            ///* Request fine */
-            if(ServicesManager.canSendResponse(code: code))
-            {
-                //Verifiy Data
-                if let data = response.data{
-                    let swiftyJsonVar : [Any] = JSON(data: data).arrayObject!
-                    callback(.None, swiftyJsonVar )
+                    getCachedData()
+                    callback(.Error, nil )
                 }
-            }else{ ///* Request not fine */
-                callback(.Error, nil )
-            }
-            
+                
         }
         
 
+    }
+    
+    //***************************
+    //get User list for API
+    //***************************
+    class func getUsers(callback: @escaping ResultResponseManager) {
+        
+        ServicesManager.get(url: UrlHelper.urlGetUserList(), callback: callback)
     }
     
     
@@ -72,38 +112,8 @@ class ServicesManager {
     //***************************
     class func getUserAlbums(userId: Int, callback: @escaping ResultResponseManager) {
         
-                debugPrint(UrlHelper.urlGetUserAlbums(id: userId))
-        
-        Alamofire.request(UrlHelper.urlGetUserAlbums(id: userId),
-                          method: .get,
-                          parameters: nil,
-                          encoding: JSONEncoding.default,
-                          headers: ServicesManager.requestHeader(type:.Basic )
-            ).response { (response) in
-                
-                
-                guard let code = response.response?.statusCode else
-                {
-                    callback(.Error, nil )
-                    return
-                }
-                
-                
-                ///* Request fine */
-                if(ServicesManager.canSendResponse(code: code))
-                {
-                    //Verifiy Data
-                    if let data = response.data{
-                        let swiftyJsonVar : [Any] = JSON(data: data).arrayObject!
-                        callback(.None, swiftyJsonVar )
-                    }
-                }else{ ///* Request not fine */
-                    callback(.Error, nil )
-                }
-                
-        }
-        
-        
+        ServicesManager.get(url: UrlHelper.urlGetUserAlbums(id: userId), callback: callback)
+       
     }
     
     //***************************
@@ -111,38 +121,10 @@ class ServicesManager {
     //***************************
     class func getAlbumPhotos(albumId: Int, callback: @escaping ResultResponseManager) {
         
-                        debugPrint(UrlHelper.urlGetAlbumPhotos(id: albumId))
-        
-        Alamofire.request(UrlHelper.urlGetAlbumPhotos(id: albumId),
-                          method: .get,
-                          parameters: nil,
-                          encoding: JSONEncoding.default,
-                          headers: ServicesManager.requestHeader(type:.Basic )
-            ).response { (response) in
-                
-                
-                guard let code = response.response?.statusCode else
-                {
-                    callback(.Error, nil )
-                    return
-                }
-                
-                ///* Request fine */
-                if(ServicesManager.canSendResponse(code: code))
-                {
-                    //Verifiy Data
-                    if let data = response.data{
-                        let swiftyJsonVar : [Any] = JSON(data: data).arrayObject!
-                        callback(.None, swiftyJsonVar )
-                    }
-                }else{ ///* Request not fine */
-                    callback(.Error, nil )
-                }
-                
-        }
-        
-        
+        ServicesManager.get(url: UrlHelper.urlGetAlbumPhotos(id: albumId), callback: callback)
+    
     }
+    
     
     
     //***************************
