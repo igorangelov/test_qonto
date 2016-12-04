@@ -99,7 +99,7 @@ class SupraCacheManager {
             
             var info : NSMutableDictionary!
             let namefile = self.randomNameFile()
-            let pathfile = self.getPathData() + "/" + namefile
+            let pathfile = type == .IMAGE ?  self.getPathImage() : self.getPathData() + "/" + namefile
             
             self.removeAllExpiredInfo()
             
