@@ -45,7 +45,7 @@ extension UIImageView {
                 let image = UIImage(data: data)
                 else { return }
             
-            SupraCacheManager.pushImageToCache(url: url.absoluteString, expiredAt: SupraCacheManager.makeExpiredDayWeek(weekLater: 1), data: data as NSData)
+            SupraCacheManager.pushDataToCache(url: url.absoluteString, expiredAt: SupraCacheManager.makeExpiredDayWeek(weekLater: 1), data: data as NSData)
             
             DispatchQueue.main.async() { () -> Void in
                 self.image = image
